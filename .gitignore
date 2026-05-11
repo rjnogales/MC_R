@@ -1,0 +1,37 @@
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Temp del extractor
+extractor/temp/
+
+# Excel generados
+extractor/OUTPUT/
+
+# VS Code
+.vscode/
+
+# Dropbox
+desktop.ini
+Thumbs.db
+
+# R
+.RData
+.Rhistory
+.Ruserdata
+
+# Shiny
+rsconnect/
+
+# OneDrive
+*.tmp
+~$*
