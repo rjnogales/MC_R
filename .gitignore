@@ -25,9 +25,9 @@ desktop.ini
 Thumbs.db
 
 # R
-.RData
-.Rhistory
-.Ruserdata
+*.RData
+*.Rhistory
+*.Ruserdata
 
 # Shiny
 rsconnect/
