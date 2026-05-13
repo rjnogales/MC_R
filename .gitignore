@@ -15,7 +15,7 @@ build/
 extractor/temp/
 
 # Excel generados
-extractor/OUTPUT/
+# extractor/OUTPUT/
 
 # VS Code
 .vscode/
