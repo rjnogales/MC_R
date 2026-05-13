@@ -20,11 +20,21 @@ from pathlib import Path
 
 
 def encontrar_script_r(carpeta_reporte: Path) -> Path:
-    """Busca el .R principal: prefiere el que no sea el nombre 'Funsionarios.R' (versión vieja)"""
+    """Busca el .R principal del área.
+
+    Preferimos un archivo cuyo nombre contenga el nombre de la carpeta/área,
+    luego uno con año en el nombre, y finalmente el primero disponible.
+    """
     archivos_r = sorted(carpeta_reporte.glob("*.R"))
     if not archivos_r:
         return None
-    # Preferir archivos con año en el nombre (versión más reciente)
+
+    nombre_area = carpeta_reporte.name.lower()
+    con_area = [f for f in archivos_r if nombre_area in f.name.lower()]
+    if con_area:
+        # Elegir el archivo más reciente dentro de los que contienen el área
+        return con_area[-1]
+
     con_año = [f for f in archivos_r if any(str(y) in f.name for y in range(2020, 2030))]
     if con_año:
         return con_año[-1]  # el último alfabéticamente (mayor año)
@@ -54,6 +64,8 @@ def main():
     raiz          = Path(__file__).parent.parent
     carpeta_reporte = raiz / nombre_reporte
     carpeta_temp    = Path(__file__).parent / "temp" / nombre_reporte
+    carpeta_output  = Path(__file__).parent / "OUTPUT"
+    carpeta_output.mkdir(parents=True, exist_ok=True)
 
     if not carpeta_reporte.exists():
         print(f"[ERROR] No existe la carpeta: {carpeta_reporte}")
@@ -77,7 +89,8 @@ def main():
         (3, "extraer_outputs",            [str(carpeta_temp)]),
         (4, "extraer_variables_derivadas",[str(carpeta_temp)]),
         (5, "extraer_relaciones",         [str(carpeta_temp)]),
-        (6, "generar_excel",              [str(carpeta_temp), str(carpeta_reporte), nombre_reporte]),
+        (6, "generar_excel",              [str(carpeta_temp), str(carpeta_output), nombre_reporte]),
+        (7, "generar_plantilla",          [nombre_reporte]),
     ]
 
     for numero, nombre, args in pasos:
@@ -87,9 +100,11 @@ def main():
             sys.exit(1)
 
     print("\n" + "=" * 60)
-    excel = carpeta_reporte / f"{nombre_reporte}_diccionario.xlsx"
+    excel = carpeta_output / f"{nombre_reporte}_diccionario.xlsx"
+    informe = carpeta_output / f"{nombre_reporte}_informe.xlsx"
     print(f"  PIPELINE COMPLETADO")
-    print(f"  Excel generado: {excel}")
+    print(f"  Diccionario generado: {excel}")
+    print(f"  Informe generado: {informe}")
     print("=" * 60)
 
 
